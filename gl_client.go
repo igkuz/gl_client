@@ -1,4 +1,4 @@
-// GitLab client package. Client gives an ability to parse GitLab jsob API
+// GitLab client package. Client gives an ability to parse GitLab json API
 // version 3 and response with proper structures.
 package gl_client
 
