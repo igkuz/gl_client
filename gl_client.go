@@ -7,6 +7,7 @@ import (
   "net/http"
   "encoding/json"
   "io/ioutil"
+  "strconv"
 )
 
 // GLClient structure – the client instance. Gives methods to parse GitLab API.
@@ -71,6 +72,17 @@ func parseUsers(body []byte) ([]User, error) {
   return u, err
 }
 
+func parseUser(body []byte) (User, error) {
+  u := User{}
+
+  err := json.Unmarshal(body, &u)
+  if err != nil {
+    fmt.Println("Error: ", err)
+  }
+
+  return u, err
+}
+
 // 
 func (c *GLClient) GetUsers() ([]User, error) {
   url := c.BaseUrl + "/api/" + c.ApiVersion + "/users"
@@ -83,4 +95,18 @@ func (c *GLClient) GetUsers() ([]User, error) {
   users, err := parseUsers(body)
 
   return users, err
+}
+
+// Get single user by ID.
+func (c *GLClient) GetUser(id int64) (*User, error) {
+  url := c.BaseUrl + "/api/" + c.ApiVersion + "/users/" + strconv.FormatInt(id, 10)
+
+  body, err := c.makeRequest(url)
+  if err != nil {
+    return nil, err
+  }
+
+  user, err := parseUser(body)
+
+  return &user, err
 }
