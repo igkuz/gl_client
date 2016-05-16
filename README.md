@@ -62,3 +62,19 @@ Response:
 ```
 { 1 John Smith j_smith j_smith@example.com }
 ```
+
+#### Get current authenticated user
+
+```
+GET /user
+```
+
+```go
+user, err := gitLabClient.GetCurrentUser()
+```
+
+Response:
+
+```
+{ 1 John Smith j_smith j_smith@example.com }
+```

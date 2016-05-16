@@ -93,3 +93,17 @@ func (c *GLClient) GetCurrentUser() (*r.User, error) {
 
   return &user, err
 }
+
+// Get current authenticated user emails.
+func (c *GLClient) GetCurrentUserEmails() (*[]r.UserEmail, error) {
+  url := c.BaseUrl + "/api/" + c.ApiVersion + "/user/emails"
+
+  body, err := c.makeRequest(url)
+  if err != nil {
+    return nil, err
+  }
+
+  userEmail, err := r.ParseUserEmails(body)
+
+  return userEmail, err
+}
