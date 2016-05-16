@@ -5,9 +5,9 @@ package gl_client
 import (
   "fmt"
   "net/http"
-  "encoding/json"
-  "io/ioutil"
   "strconv"
+  "io/ioutil"
+  r "github.com/igkuz/gl_client/resources"
 )
 
 // GLClient structure – the client instance. Gives methods to parse GitLab API.
@@ -18,14 +18,6 @@ type GLClient struct {
   BaseUrl     string
   Client      *http.Client
   ApiVersion  string
-}
-
-// User structure used to represent API response with object.
-type User struct {
-  Id          int64   `json:"id"`
-  Name        string  `json:"name"`
-  Username    string  `json:"username"`
-  Email       string  `json:"email"`
 }
 
 // NewClient returns GLClient instance.
@@ -60,31 +52,8 @@ func (c *GLClient) makeRequest(url string) ([]byte, error) {
   return []byte(body), err
 }
 
-// parseUsers function parses response body from API. Unmarshals json to User structure.
-func parseUsers(body []byte) ([]User, error) {
-  u := []User{}
-
-  err := json.Unmarshal(body, &u)
-  if err != nil {
-    fmt.Println("Error: ", err)
-  }
-
-  return u, err
-}
-
-func parseUser(body []byte) (User, error) {
-  u := User{}
-
-  err := json.Unmarshal(body, &u)
-  if err != nil {
-    fmt.Println("Error: ", err)
-  }
-
-  return u, err
-}
-
 // 
-func (c *GLClient) GetUsers() ([]User, error) {
+func (c *GLClient) GetUsers() ([]r.User, error) {
   url := c.BaseUrl + "/api/" + c.ApiVersion + "/users"
 
   body, err := c.makeRequest(url)
@@ -92,13 +61,13 @@ func (c *GLClient) GetUsers() ([]User, error) {
     return nil, err
   }
 
-  users, err := parseUsers(body)
+  users, err := r.ParseUsers(body)
 
   return users, err
 }
 
 // Get single user by ID.
-func (c *GLClient) GetUser(id int64) (*User, error) {
+func (c *GLClient) GetUser(id int64) (*r.User, error) {
   url := c.BaseUrl + "/api/" + c.ApiVersion + "/users/" + strconv.FormatInt(id, 10)
 
   body, err := c.makeRequest(url)
@@ -106,7 +75,21 @@ func (c *GLClient) GetUser(id int64) (*User, error) {
     return nil, err
   }
 
-  user, err := parseUser(body)
+  user, err := r.ParseUser(body)
+
+  return &user, err
+}
+
+// Get current authenticated user.
+func (c *GLClient) GetCurrentUser() (*r.User, error) {
+  url := c.BaseUrl + "/api/" + c.ApiVersion + "/user"
+
+  body, err := c.makeRequest(url)
+  if err != nil {
+    return nil, err
+  }
+
+  user, err := r.ParseUser(body)
 
   return &user, err
 }
