@@ -3,6 +3,8 @@
 Package provides methods for pasing GitLab API and return structures that are easy to work with.
 Currently supports only last api version – v3.
 
+Full API documentation with request params and response examples can be found [here](http://docs.gitlab.com/ce/api/)
+
 ### Initializing
 
 ```go
