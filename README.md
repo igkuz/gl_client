@@ -30,3 +30,19 @@ client := &http.Client{Transport: transport}
 gitLabClient := gl_client.NewClient(apiToken, baseUrl, apiVersion, client)
 users, err := gitLabClient.GetUsers()
 ```
+
+### Single user
+
+```
+GET /users/:id
+```
+
+```go
+user, err := gitLabClient.GetUser(1)
+```
+
+Response:
+
+```
+{ 1 John Smith j_smith j_smith@example.com }
+```
