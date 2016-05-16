@@ -12,7 +12,6 @@ apiVersion := "v3"
 client := &http.Client{}
 
 gitLabClient := gl_client.NewClient(apiToken, baseUrl, apiVersion, client)
-users, err := gitLabClient.GetUsers()
 ```
 
 Inhouse instances of GitLab sometimes use self signed SSL certificates. For proper work with this case you should skip verifying of certificate.
@@ -28,7 +27,22 @@ apiVersion := "v3"
 client := &http.Client{Transport: transport}
 
 gitLabClient := gl_client.NewClient(apiToken, baseUrl, apiVersion, client)
+```
+
+### Get users
+
+```
+GET /users
+```
+
+```go
 users, err := gitLabClient.GetUsers()
+```
+
+Response:
+
+```
+[{1 John Smith j_smith j_smith@exmaple.com} {2 John Galt j_galt j_galt@exmaple.com}]
 ```
 
 ### Single user
